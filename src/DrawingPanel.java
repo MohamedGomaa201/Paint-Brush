@@ -75,6 +75,9 @@ class DrawingPanel extends JPanel implements MouseListener, MouseMotionListener 
         } else if (previewShape != null) {
             shapes.add(previewShape);
             previewShape = null;
+        } else if (currentTool.equals("Triangle") && previewShape != null) {
+            shapes.add(previewShape);
+            previewShape = null;
         }
         repaint();
     }
@@ -107,8 +110,15 @@ class DrawingPanel extends JPanel implements MouseListener, MouseMotionListener 
                 previewShape = new Rectangle(new Point(x, y), width, height, currentColor, isFilled);
                 break;
             case "Triangle":
-                Point thirdPoint = new Point((startPoint.x + endPoint.x) / 2, startPoint.y);
-                previewShape = new Triangle(startPoint, endPoint, thirdPoint, currentColor, isFilled);
+                Point apex = startPoint;
+
+                Point rightLeg = endPoint;
+
+                int baseX = 2 * startPoint.x - endPoint.x;
+                int baseY = endPoint.y;
+                Point leftBase = new Point(baseX, baseY);
+
+                previewShape = new Triangle(apex, rightLeg, leftBase, currentColor, isFilled);
                 break;
             case "Oval":
                 previewShape = new Oval(new Point(x, y), width, height, currentColor, isFilled);
